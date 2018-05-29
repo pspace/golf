@@ -6,7 +6,7 @@ func main() {
 
 	//elf.PrintHeaderDescription()
 	//elf.GenerateHeaderStruct()
-
+	//elf.GenerateAll()
 	elf.ParseElf("/bin/ls")
 
 	//parsedHeader := elf.ParseELFHeader(f)

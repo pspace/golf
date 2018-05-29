@@ -30,7 +30,7 @@ func OpenFile(name string) *os.File {
 
 
 
-func ReadNextBytesFromFile(input *os.File, count int) []byte{
+func ReadNextBytesFromFile(input *os.File, count uint64) []byte{
 	data := make([]byte, count)
 	_, err := input.Read(data)
 	if err != nil {
@@ -38,4 +38,13 @@ func ReadNextBytesFromFile(input *os.File, count int) []byte{
 	}
 
 	return data
+}
+
+func Clen(n []byte) int {
+	for i := 0; i < len(n); i++ {
+		if n[i] == 0 {
+			return i
+		}
+	}
+	return len(n)
 }
