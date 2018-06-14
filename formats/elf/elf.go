@@ -4,6 +4,8 @@ import (
 	"github.com/pspace/golf/helper"
 	"fmt"
 	"os"
+	"github.com/pspace/golf/disassembler"
+	"github.com/bnagy/gapstone"
 )
 
 func ParseProgramHeaders(f *os.File, count uint16, entrySize uint16) []*ProgramHeaderData{
@@ -46,7 +48,7 @@ func GetProgram(f *os.File, elfHeader *ELFHeaderData)  {
 	}
 }
 
-func GetSections(f *os.File, elfHeader *ELFHeaderData) {
+func GetSections(f *os.File, elfHeader *ELFHeaderData) []*SectionHeaderData{
 	shOff := (*elfHeader).E_shoff
 	shNum := (*elfHeader).E_shnum
 	shEntsize := (*elfHeader).E_shentsize
@@ -68,22 +70,32 @@ func GetSections(f *os.File, elfHeader *ELFHeaderData) {
 
 	}
 
+	return sectionHeaders
 }
 
 
 func ParseElf(path string){
-	f := helper.OpenFile("/bin/ls")
+	f := helper.OpenFile(path)
 	if nil == f {
 		fmt.Printf("An error occurred. Exiting")
 		os.Exit(helper.EOPEN)
 	}
 
 	elfHeader := ParseELFHeader(f)
-	fmt.Printf("%$",(*elfHeader).String())
+	fmt.Printf("%s",(*elfHeader).String())
 
 	//GetProgram(f, elfHeader)
-	GetSections(f, elfHeader)
+	sectionHeaders := GetSections(f, elfHeader)
+
+	for _, h := range sectionHeaders{
+		t := (*h).SH_type
+		if t == SECTION_TYPE_PROGBITS {
+			disasmInfo := disassembler.DisassemblerSpecs{gapstone.CS_ARCH_X86, gapstone.CS_MODE_64}
+			f.Seek( int64((*h).SH_offset), 0)
+			data := helper.ReadNextBytesFromFile(f,  (*h).SH_size)
+			disassembler.Disassemble(disasmInfo, &data)
+		}
+	}
 
 
 }
-

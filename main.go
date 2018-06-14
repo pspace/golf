@@ -1,6 +1,9 @@
 package main
 
-import "github.com/pspace/golf/formats/elf"
+import (
+	"github.com/pspace/golf/formats/elf"
+	"github.com/pspace/golf/repl"
+)
 
 func main() {
 
@@ -8,6 +11,8 @@ func main() {
 	//elf.GenerateHeaderStruct()
 	//elf.GenerateAll()
 	elf.ParseElf("/bin/ls")
+
+	repl.StartInteractive()
 
 	//parsedHeader := elf.ParseELFHeader(f)
 

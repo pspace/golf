@@ -11,6 +11,8 @@ const (
 	SUCCESS = 0
 	EOPEN = 1
 	EPHOFF = 2
+	ECAPSTONE = 3
+	EDISASSEMBLE = 4
 )
 
 func OpenFile(name string) *os.File {
