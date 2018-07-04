@@ -6,7 +6,13 @@ import (
 	"fmt"
 )
 
+
+
 const prompt = "> "
+
+func dispatch(command *string){
+
+}
 
 func StartInteractive(){
 
@@ -22,6 +28,7 @@ func StartInteractive(){
 			break
 		}
 
+		dispatch(&text)
 		fmt.Print(prompt)
 
 	}
